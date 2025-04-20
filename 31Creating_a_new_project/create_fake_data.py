@@ -1,4 +1,5 @@
-# I would like to connect to my Ollama server. I want to use the 'phi4:latest' model, I would like to send a prompt to it it asking for fake data, and have it return in a CSV format. 
+# I would like to connect to my Ollama server. 
+# I want to use the 'phi4:latest' model, I would like to send a prompt to it it asking for fake data, and have it return in a CSV format. 
 
 import requests
 import json
@@ -11,43 +12,27 @@ class OllamaFakeDataGenerator:
     """
     def __init__(self, base_url="http://localhost:11434"):
         self.base_url = base_url
-        self.model = "phi4:latest"
+        self.model = "phi3:mini"
         
     def generate_fake_data(self, num_records=5):
         """
-        Generate fake data using Ollama API
+        Generate fake data using the phi4 model.
         """
-        # Construct the prompt for fake data generation
-        prompt = f"""
-        Generate {num_records} records of fake personal data in CSV format.
-        Include: Name, Age, Gender, Email, Phone, Address.
-        Return only the CSV data without any additional text.
-        Format: Name,Age,Email,Phone,Address
-        """
-        
-        # API endpoint for Ollama
-        url = f"{self.base_url}/api/generate"
-        
-        # Request payload
         payload = {
             "model": self.model,
-            "prompt": prompt,
-            "stream": False
+            "prompt": f"Generate {num_records} fake data records in CSV format."
         }
-        
         try:
-            response = requests.post(url, json=payload)
+            print(f"Sending request to {self.base_url}/api/generate with payload: {payload}")
+            response = requests.post(f"{self.base_url}/api/generate", json=payload, timeout=30)
+            print("Received response from Ollama server.")
             response.raise_for_status()
-            
-            # Extract the response text
-            result = response.json()
-            csv_data = result['response']
-            
-            return csv_data
-            
+            return response.text
+        except requests.exceptions.Timeout:
+            print("Request to Ollama server timed out.")
         except requests.exceptions.RequestException as e:
             print(f"Error connecting to Ollama server: {e}")
-            return None
+        return None
 
 def save_to_csv(data, filename="fake_data.csv"):
     """
@@ -73,7 +58,7 @@ def save_to_csv(data, filename="fake_data.csv"):
 
 def main():
     """
-    Main function to generate and save fake data
+    Main function to generate and save fake dataapp
     """
     print("Connecting to Ollama server...")
     
