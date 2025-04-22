@@ -1,0 +1,16 @@
+fake_data_generator/
+├── app/
+│   ├── __init__.py
+│   ├── main.py          # Entry point for the FastAPI app
+│   ├── services.py      # Contains the FakeDataGenerator class
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── fake_data.py # Route for /getfakedata
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── fake_data.py # Pydantic model for request validation
+├── tests/
+│   ├── __init__.py
+│   ├── test_fake_data.py # Unit tests for the /getfakedata route
+├── requirements.txt
+├── venv/ (virtual environment folder)
