@@ -75,4 +75,4 @@ class FakeDataGenerator:
 				"company": row[9],
 			}
 			for row in rows
-		]
+		] 
